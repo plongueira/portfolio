@@ -40,7 +40,7 @@ docker compose run --rm web npm install <paquete>
 
 ### Configuración de GitHub (una sola vez)
 
-1. **Settings → Pages → Build and deployment → Source:** elige **GitHub Actions**.
+1. **Settings → Pages → Build and deployment → Source:** elige **GitHub Actions**. Si se queda en *Deploy from a branch*, GitHub ejecuta en cada push su propio workflow `pages build and deployment` con Jekyll. Ese workflow no está en el repositorio y falla al intentar procesar los archivos de Astro.
 2. **Settings → Environments → github-pages → Deployment branches and tags:** añade una regla de tag (por ejemplo `v*`). Por defecto este entorno solo permite desplegar desde `main`, y las Releases se ejecutan desde un tag.
 
 La URL pública y la ruta base (por ejemplo `/portfolio`) no están escritas en el código. El workflow las lee de la configuración de Pages durante la publicación. Si más adelante añades un dominio propio en Settings → Pages, se ajustan solas.
