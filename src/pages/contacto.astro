@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Contacto">
+  <header class="page-head">
+    <p class="eyebrow">Contacto</p>
+    <h1>Hablemos</h1>
+    <p class="lead">La forma más directa de contactar conmigo es por email.</p>
+  </header>
+
+  <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+
+  {
+    site.links.length > 0 && (
+      <ul class="contact-links">
+        {site.links.map((link) => (
+          <li>
+            <a href={link.url}>
+              <span>{link.label}</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Base>

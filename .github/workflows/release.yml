@@ -1,0 +1,58 @@
+name: Release
+
+# Publica en GitHub Pages solo al publicar una Release (nunca en push ni PR).
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+# Un solo despliegue a la vez; no se cancela uno que ya esté en marcha.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Las versiones preliminares no se publican.
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    # Misma imagen que compose.yaml y ci.yml.
+    container: node:26-bookworm-slim
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          persist-credentials: false
+
+      # Obtiene la URL y la ruta base de Pages para astro.config.mjs.
+      - id: pages
+        uses: actions/configure-pages@v6
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

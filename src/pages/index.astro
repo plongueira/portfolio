@@ -1,0 +1,47 @@
+---
+import { url } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import ProjectList from '../components/ProjectList.astro';
+import PostList from '../components/PostList.astro';
+import { site } from '../data/site';
+import { getPosts, getProjects } from '../lib/content';
+
+const projects = (await getProjects()).slice(0, 3);
+const posts = (await getPosts()).slice(0, 3);
+---
+
+<Base>
+  <section class="hero">
+    <p class="eyebrow">{site.role}{site.location && ` · ${site.location}`}</p>
+    <h1>{site.tagline}</h1>
+    <p class="lead">{site.description}</p>
+    <p class="actions">
+      <a class="button" href={url('/proyectos/')}>Ver proyectos</a>
+      <a class="text-link" href={url('/contacto/')}>Contactar →</a>
+    </p>
+  </section>
+
+  {
+    projects.length > 0 && (
+      <section class="section">
+        <header class="section-head">
+          <h2>Proyectos</h2>
+          <a class="text-link" href={url('/proyectos/')}>Todos →</a>
+        </header>
+        <ProjectList projects={projects} />
+      </section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <section class="section">
+        <header class="section-head">
+          <h2>Blog</h2>
+          <a class="text-link" href={url('/blog/')}>Todos →</a>
+        </header>
+        <PostList posts={posts} />
+      </section>
+    )
+  }
+</Base>

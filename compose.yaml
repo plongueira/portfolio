@@ -1,0 +1,19 @@
+# Entorno de desarrollo: docker compose up → http://localhost:4321
+# Usa la misma imagen de Node que los workflows de GitHub Actions.
+services:
+  web:
+    image: node:26-bookworm-slim
+    working_dir: /app
+    # --ignore-lock: este contenedor solo ejecuta un servidor, así que no hace
+    # falta el bloqueo .astro/dev.json. Como vive en la carpeta montada,
+    # sobrevivía a los reinicios y Astro creía que seguía otro servidor activo.
+    # exec: Astro recibe directamente la señal de parada y se cierra limpiamente.
+    command: sh -c "npm ci && exec node_modules/.bin/astro dev --host 0.0.0.0 --ignore-lock"
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:

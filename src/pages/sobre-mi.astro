@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Sobre mí">
+  <header class="page-head">
+    <p class="eyebrow">Sobre mí</p>
+    <h1>{site.name}</h1>
+  </header>
+  <div class="prose">
+    {site.about.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+</Base>

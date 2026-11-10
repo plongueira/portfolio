@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/content';
+
+const posts = await getPosts();
+---
+
+<Base title="Blog">
+  <header class="page-head">
+    <p class="eyebrow">Blog</p>
+    <h1>Artículos</h1>
+  </header>
+  {
+    posts.length > 0 ? (
+      <PostList posts={posts} />
+    ) : (
+      <p class="empty">Todavía no hay artículos publicados.</p>
+    )
+  }
+</Base>

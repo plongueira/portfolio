@@ -1,0 +1,13 @@
+---
+import { url } from '../lib/url';
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Página no encontrada">
+  <header class="page-head">
+    <p class="eyebrow">Error 404</p>
+    <h1>Esta página no existe</h1>
+    <p class="lead">Puede que el enlace esté roto o que la página se haya movido.</p>
+  </header>
+  <p><a class="button" href={url('/')}>Volver al inicio</a></p>
+</Base>

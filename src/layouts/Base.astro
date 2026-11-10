@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+
+const nav = [
+  { href: '/', label: 'Inicio' },
+  { href: '/sobre-mi/', label: 'Sobre mí' },
+  { href: '/proyectos/', label: 'Proyectos' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/contacto/', label: 'Contacto' },
+];
+
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const isActive = (href: string) =>
+  href === '/' ? path === url('/') : path.startsWith(url(href));
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={url('/')}>{site.name}</a>
+        <nav aria-label="Principal">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© {new Date().getFullYear()} {site.name}</p>
+        <ul>
+          <li><a href={`mailto:${site.email}`}>Email</a></li>
+          {site.links.map((link) => <li><a href={link.url}>{link.label}</a></li>)}
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectList from '../components/ProjectList.astro';
+import { getProjects } from '../lib/content';
+
+const projects = await getProjects();
+---
+
+<Base title="Proyectos">
+  <header class="page-head">
+    <p class="eyebrow">Proyectos</p>
+    <h1>Cosas que he construido</h1>
+  </header>
+  {
+    projects.length > 0 ? (
+      <ProjectList projects={projects} />
+    ) : (
+      <p class="empty">Todavía no hay proyectos publicados.</p>
+    )
+  }
+</Base>
